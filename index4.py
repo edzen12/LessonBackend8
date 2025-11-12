@@ -13,7 +13,9 @@ class Computer:
     @property
     def hourly_rate(self):
         return self.____hourly_rate
-    
+
+# ура так менять
+
 # Методы:
 # start_session(client, hours) — запускает сессию, делает компьютер занятым.
 # end_session() — завершает сессию, считает оплату.

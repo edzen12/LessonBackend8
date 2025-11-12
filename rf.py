@@ -44,3 +44,18 @@
 # book_tour(client, tour_id) — бронирует тур для клиента;
 # cancel_all_bookings() — отменяет все активные брони;
 # show_status() — показывает состояние всех туров и текущую выручку.
+
+# git config --global user.name 'edzen12'
+# git config --global user.email 'edzen@gmail.com'
+
+# git init 
+
+# git add .
+
+# git commit -m "наш первый коммит"
+
+# git branch -M main 
+
+# git remote add origin https:
+
+# git push origin -u main
