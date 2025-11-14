@@ -14,11 +14,11 @@ class BaseBook:
             self.__price = value 
 
     def info(self):
-        return f"{self._title} {self._author} {self.__price}"
+        return f"{self._title} {self._author} {self.price}"
 
 class Book(BaseBook):
     def info(self):
-        return f"Книга:{self._title} автор: {self._author} {self.__price}сом" 
+        return f"Книга:{self._title} автор: {self._author} {self.price}сом" 
 
 class EBook(BaseBook): 
     def __init__(self, title, author, price, file_size_mb):
@@ -26,7 +26,7 @@ class EBook(BaseBook):
         self._file_size_mb = file_size_mb
     
     def info(self):
-        return f"Электронная книга:{self._title} автор: {self._author} {self.__price}сом, файл {self._file_size_mb}МБ»" 
+        return f"Электронная книга:{self._title} автор: {self._author} {self.price}сом, файл {self._file_size_mb}МБ»" 
 
 class AudioBook(BaseBook): 
     def __init__(self, title, author, price, duration_min):
@@ -34,18 +34,64 @@ class AudioBook(BaseBook):
         self._duration_min = duration_min
     
     def info(self):
-        return f"Электронная книга:{self._title} автор: {self._author} {self.__price}сом, длительность {self._duration_min}мин»"  
+        return f"Электронная книга:{self._title} автор: {self._author} {self.price}сом, длительность {self._duration_min}мин»"  
 
-# Класс Inventory (склад):
-# защищённый список _books
-# метод add_books(*books): принимает любое количество объектов книг, проверяет тип
-# метод find_books(**filters): возвращает список книг, соответствующих переданным параметрам
-# метод remove_book(book): удаляет книгу
-# метод all_books(): возвращает копию списка книг
+class Inventory:
+    def __init__(self):
+        self._books = []
 
-# Класс BookStore:
-# атрибут name
-# объект inventory
-# приватный атрибут __income + свойство income (только чтение)
-# метод sell_book(title): ищет по названию, удаляет книгу, увеличивает доход
-# метод show_status(): возвращает название магазина, доход и список всех книг через info()
+    def add_books(self, *books): #принимает любое количество объектов книг
+        for i in books:
+            self._books.append(i)
+
+    def find_books(self, **filters): 
+        res = self._books
+        for key, value in filters.items():
+            res = [b for b in res if getattr(b, f"_{key}", None)==value]
+        return res 
+
+    def remove_book(self, book): 
+        if book in self._books:
+            self._books.remove(book)
+    
+    def all_books(self):
+        return self._books.copy()
+ 
+
+class BookStore:
+    def __init__(self, name):
+        self.name = name
+        self.inventory = Inventory()
+        self.__income = 0
+    
+    @property
+    def income(self):
+        return self.__income
+    
+    def sell_book(self, title): #ищет по названию, удаляет книгу, увеличивает доход
+        for book in self.inventory.all_books():
+            if book._title == title:
+                self.__income += book.price
+                self.inventory.remove_book(book)
+                return True
+        return False
+
+    def show_status(self): 
+        return {
+            'Магазин':self.name,
+            'Доход':self.__income,
+            'Книги':[b for b in self.inventory.all_books()],
+        }
+
+b1 = Book("Война и мир", "Толстой", 400)
+b2 = EBook("Грокаем алгоритмы", "Бархов", 500, file_size_mb=20)
+b3 = AudioBook("Python основы", "Gena", 450, duration_min=700)
+
+store = BookStore('IT книжная')
+store.inventory.add_books(b1, b2, b3)
+found = store.inventory.find_books(title="Грокаем алгоритмы")
+for book in found:
+    print(book.info())
+
+store.sell_book("Python основы")
+print(store.show_status())
