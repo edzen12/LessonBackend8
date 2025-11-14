@@ -1,20 +1,50 @@
-# ЗАДАЧА: «Система управления рестораном»
-# Требуется разработать систему моделирования работы ресторана, используя инкапсуляцию, наследование, а также *args и **kwargs.
+class Ingredient:
+    def __init__(self, name:str, quantity_grams:float, price_per_gram):
+        self._name = name 
+        self._quantity = float(quantity_grams) 
+        self.__price_per_gram = None 
+        self.price_per_gram = price_per_gram 
 
-# Класс Ingredient:
-# защищённые атрибуты: _name, _quantity (в граммах)
-# приватный атрибут: __price_per_gram
-# свойство price_per_gram (цена ≥ 0.1)
-# метод cost(weight): возвращает стоимость weight граммов
+    @property
+    def price_per_gram(self):
+        return self.__price_per_gram
+    
+    @price_per_gram.setter
+    def price_per_gram(self, value):
+        if value>=0.1:
+            self.__price_per_gram = float(value)
+    
+     
+    def cost(self, weight_grams): #возвращает стоимость weight граммов
+        return float(weight_grams)*self.__price_per_gram
+    
 
-# Класс Dish (базовый класс для всех блюд):
-# защищённые атрибуты: _name, _ingredients (словарь: ингредиент → граммы)
-# приватный атрибут: __base_price (минимум 20 сом, через свойство)
-# метод total_cost(): стоимость ингредиентов + base_price
-# метод info(): будет переопределён в наследниках
+class Dish:
+    def __init__(self, name, ingredients, base_price):
+        self._name = name 
+        self._ingredients = dict(ingredients) 
+        self.__base_price = None 
+        self.base_price = base_price
+    
+    @property
+    def base_price(self):
+        return self.__base_price
+    
+    @base_price.setter
+    def base_price(self, value):
+        if value>20:
+            self.__base_price = float(value) 
+    
+    def total_cost(self): #стоимость ингредиентов + base_price
+        pass
+    
+    def info(self): #будет переопределён в наследниках
+        pass
 
-# Наследники Dish:
-# • HotDish — горячее блюдо
+class HotDish(Dish): #горячее блюдо
+    def __init__(self, name, ingredients, base_price, spicy_level):
+        super().__init__(name, ingredients, base_price)
+        self._spicy_level = spicy_level #(0–5)
 # Доп. атрибут: _spicy_level (0–5)
 # info(): «Горячее блюдо: <name>, острота <spicy>, цена <total_cost>»
 # • Dessert — десерт
