@@ -1,16 +1,40 @@
-# ЗАДАЧА: Cистема книжного магазина
-# Требуется реализовать систему управления книжным магазином с использованием инкапсуляции, наследования, аргументов *args и **kwargs.
+class BaseBook:
+    def __init__(self, title, author, price):
+        self._title = title
+        self._author = author
+        self.__price = price
+    
+    @property
+    def price(self):
+        return self.__price
+    
+    @price.setter
+    def price(self, value):
+        if value >= 100:
+            self.__price = value 
 
-# класс BaseBook:
-# защищённые атрибуты: _title, _author
-# приватный атрибут: __price
-# свойство price с проверкой (цена ≥ 100)
-# метод info()
+    def info(self):
+        return f"{self._title} {self._author} {self.__price}"
 
-# Классы-наследники от BaseBook:
-# • Book — обычная книга. Реализация info(): «Книга: <title> — <author>, <price> сом»
-# • EBook — электронная книга. Доп. атрибут: _file_size_mb. info(): «Электронная книга: <title> — <author>, <price> сом, файл <size> МБ»
-# • AudioBook — аудиокнига. Доп. атрибут: _duration_min. info(): «Аудиокнига: <title> — <author>, <price> сом, длительность <minutes> мин»
+class Book(BaseBook):
+    def info(self):
+        return f"Книга:{self._title} автор: {self._author} {self.__price}сом" 
+
+class EBook(BaseBook): 
+    def __init__(self, title, author, price, file_size_mb):
+        super().__init__(title, author, price)
+        self._file_size_mb = file_size_mb
+    
+    def info(self):
+        return f"Электронная книга:{self._title} автор: {self._author} {self.__price}сом, файл {self._file_size_mb}МБ»" 
+
+class AudioBook(BaseBook): 
+    def __init__(self, title, author, price, duration_min):
+        super().__init__(title, author, price)
+        self._duration_min = duration_min
+    
+    def info(self):
+        return f"Электронная книга:{self._title} автор: {self._author} {self.__price}сом, длительность {self._duration_min}мин»"  
 
 # Класс Inventory (склад):
 # защищённый список _books
