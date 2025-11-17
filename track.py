@@ -1,20 +1,62 @@
-# ЗАДАЧА: «Система управления транспортной компанией»
-# Необходимо создать систему управления транспортной компанией, используя инкапсуляцию, наследование, полиморфизм, *args и **kwargs.
+class Cargo:
+    def __init__(self, name, weight_kg, price_per_kg):
+        self._name = name
+        self._weight_kg = float(weight_kg)
+        self.__price_per_kg = None
+        self.price_per_kg = price_per_kg 
+    
+    @property
+    def price_per_kg(self):
+        return self.__price_per_kg
 
-# Класс Cargo (груз):
-# защищённые атрибуты: _name, _weight_kg
-# приватный атрибут: __price_per_kg
-# свойство price_per_kg (минимум 5 сом/кг)
-# метод cost(): стоимость всего груза
+    @price_per_kg.setter
+    def price_per_kg(self, value):
+        if value >= 5:
+            self.__price_per_kg = value
+            
+    def cost(self): #стоимость всего груза
+        return round(self._weight_kg * self.__price_per_kg, 2)
 
-# Класс Vehicle (базовый транспорт):
-# защищённые атрибуты: _model, _capacity_kg
-# приватный атрибут: __base_fee (минимум 100 сом)
-# список _cargo_list — грузы внутри транспорта
-# метод add_cargo(cargo): добавляет груз, если хватает грузоподъёмности
-# метод total_weight(): общий вес груза
-# метод total_cost(): стоимость перевозки = base_fee + суммы cost() всех грузов
-# метод info(): переопределяется в наследниках
+    def info(self):
+        return f"{self._name}: {self._weight_kg}кг, {self.__price_per_kg}сом/кг"
+
+class Vehicle:
+    def __init__(self, model, capacity_kg, base_fee):
+        self._model = model
+        self._capacity_kg = capacity_kg
+        self._cargo_list = []
+        self.__base_fee = None 
+        self.base_fee = base_fee 
+    
+    @property
+    def base_fee(self):
+        return self.__base_fee
+    @base_fee.setter
+    def base_fee(self, value):
+        if value >= 100:
+            self.__base_fee = value
+        else:
+            print("Базовая оплата должны быть от 100 и выше")
+
+    def add_cargo(self, cargo):
+        #если хватает грузоподъёмности
+        if self.total_weight() + cargo._weight_kg > self._capacity_kg: 
+            return False
+        self._cargo_list.append(cargo) #добавляет груз
+        return True
+
+    def total_weight(self): # общий вес груза
+        return sum(c._weight_kg for c in self._cargo_list)
+    
+    #стоимость перевозки = base_fee + суммы cost() всех грузов
+    def total_cost(self): 
+        total = self.__base_fee
+        for c in self._cargo_list:
+            total += c.cost()
+        return round(total, 2)
+    
+    def info(self):
+        return f"{self._model}, вес: {self.total_weight()}, цена: {self.total_cost()}"
 
 # Наследники Vehicle:
 # • Truck — грузовик
