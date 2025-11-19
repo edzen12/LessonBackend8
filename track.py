@@ -24,7 +24,7 @@ class Vehicle:
     def __init__(self, model, capacity_kg, base_fee):
         self._model = model
         self._capacity_kg = capacity_kg
-        self._cargo_list = []
+        self._cargo_list = [] # грузы внутри транспорта
         self.__base_fee = None 
         self.base_fee = base_fee 
     
@@ -60,7 +60,7 @@ class Vehicle:
         return f"{self._model}, вес: {self.total_weight()}, цена: {self.total_cost()}"
 
 # Наследники Vehicle:
-class Truck(Vehicle):
+class Truck(Vehicle): #грузовик
     def __init__(self, model, capacity_kg, base_fee, axles):
         super().__init__(model, capacity_kg, base_fee)
         self._axles = axles
@@ -68,7 +68,7 @@ class Truck(Vehicle):
     def info(self):
         return f"Грузовик {self._model}, осей: {self._axles}, вес {self.total_weight}, цена {self.total_cost()}"
 
-class Van(Vehicle):
+class Van(Vehicle): #фургон
     def __init__(self, model, capacity_kg, base_fee, volume_m3):
         super().__init__(model, capacity_kg, base_fee)
         self._volume_m3 = volume_m3
@@ -76,7 +76,7 @@ class Van(Vehicle):
     def info(self):
         return f"Грузовик {self._model}, объем: {self._volume_m3} м3, вес {self.total_weight}, цена {self.total_cost()}"   
 
-class BikeCourier(Vehicle):
+class BikeCourier(Vehicle): #мото
     def __init__(self, model, capacity_kg, base_fee, speed):
         super().__init__(model, capacity_kg, base_fee)
         self._speed = speed
@@ -85,11 +85,18 @@ class BikeCourier(Vehicle):
         return f"«Курьер {self._model}, скорость: {self._speed} км/ч, вес {self.total_weight}, цена {self.total_cost()}"   
     
 
-# Класс Fleet (автопарк):
-# защищённый список _vehicles
-# метод add_vehicles(*vehicles): добавляет любое количество транспортов
-# метод find_vehicles(**filters): поиск по model, axles, speed, capacity и т.п.
-# метод all_vehicles()
+class Fleet: #автопарк
+    def __init__(self):
+        self._vehicles = []
+    
+    def add_vehicles(self, *vehicles): #добавляет любое количество транспортов
+        pass
+
+    def find_vehicles(self, **filters): #поиск по model, axles, speed, capacity и т.п.
+        pass
+    
+    def all_vehicles(self):
+        pass
 
 # Класс TransportCompany:
 # атрибут name
