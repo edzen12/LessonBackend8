@@ -31,6 +31,7 @@ class Vehicle:
     @property
     def base_fee(self):
         return self.__base_fee
+    
     @base_fee.setter
     def base_fee(self, value):
         if value >= 100:
@@ -59,15 +60,30 @@ class Vehicle:
         return f"{self._model}, вес: {self.total_weight()}, цена: {self.total_cost()}"
 
 # Наследники Vehicle:
-# • Truck — грузовик
-# Доп. атрибут: _axles
-# info(): «Грузовик <model>, осей: <axles>, вес <total_weight>, цена <total_cost>»
-# • Van — фургон
-# Доп. атрибут: _volume_m3
-# info(): «Фургон <model>, объем <volume> м3, вес <total_weight>, цена <total_cost>»
-# • BikeCourier — курьер на мото/велосипеде
-# Доп. атрибут: _speed
-# info(): «Курьер <model>, скорость <speed> км/ч, вес <total_weight>, цена <total_cost>»
+class Truck(Vehicle):
+    def __init__(self, model, capacity_kg, base_fee, axles):
+        super().__init__(model, capacity_kg, base_fee)
+        self._axles = axles
+
+    def info(self):
+        return f"Грузовик {self._model}, осей: {self._axles}, вес {self.total_weight}, цена {self.total_cost()}"
+
+class Van(Vehicle):
+    def __init__(self, model, capacity_kg, base_fee, volume_m3):
+        super().__init__(model, capacity_kg, base_fee)
+        self._volume_m3 = volume_m3
+
+    def info(self):
+        return f"Грузовик {self._model}, объем: {self._volume_m3} м3, вес {self.total_weight}, цена {self.total_cost()}"   
+
+class BikeCourier(Vehicle):
+    def __init__(self, model, capacity_kg, base_fee, speed):
+        super().__init__(model, capacity_kg, base_fee)
+        self._speed = speed
+
+    def info(self):
+        return f"«Курьер {self._model}, скорость: {self._speed} км/ч, вес {self.total_weight}, цена {self.total_cost()}"   
+    
 
 # Класс Fleet (автопарк):
 # защищённый список _vehicles
